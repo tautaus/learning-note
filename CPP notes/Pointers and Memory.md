@@ -46,5 +46,5 @@ We need to think about the relationship we want to build between the function an
 - The unique pointer: the function will take the ownership from the original pointer and delete the value after UNLESS we pass in the unique pointer by reference.
 - The shared pointer: the function will be a shared owner to the resource and might delete the value UNLESS we pass in the reference.
 
-One thing we need to be cautious of is that when we receive a return value, figure out if we borrow\share\own exclusively the ownership to the resource before make any changes. Using a smart pointer will rescue us from it. 
+One thing we need to be cautious of is that when we pass in arguments or receive a return value, figure out if we borrow\share\own exclusively the ownership to the resource before make any changes. Using a smart pointer will rescue us from the problem. 
 
