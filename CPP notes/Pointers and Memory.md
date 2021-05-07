@@ -30,12 +30,21 @@ First of all, weak_ptr is not a classic smart pointer because it DOESN'T own and
 
 Other than a pointer, it looks more like a pointer to poiner, but why do we need a smart pointer for that?
 
-To solve the cyclic reference problem. Suppose we have node_1 and node_2, they are initialized with shared_ptr's linked to each other by shared_ptr's. When they go out of the scope, no one will be deleted and we will have a memory leak! Here is what happened:
+To solve the cyclic reference problem. Suppose we have node_1 and node_2, they are initialized with shared_ptr's linked to each other by shared_ptr's. When they go out of the scope, no one will be deleted, and we will have a memory leak! Here is what happened:
 1. The shared_ptr that points to the node_1 goes out of the scope first and checks if there are other shared_ptr's point to node_1.
 2. There is a shared_ptr of node_2 that points to node_1, so node_1 will not be deallocated and the shared_ptr of node_1 that points to node_2 stays.
 3. Same thing happens to node_2, and everything stays.
 
-Such situation will not happen if we use shared_ptr as the forward link and weak_ptr as the backward link. In specific, the above-mentioned step 2 won't happen as weak_ptr IS NOT a owner to the resource.
+Such situation will not happen if we use shared_ptr as the forward link and weak_ptr as the backward link. In specific, the above-mentioned step 2 will not happen as weak_ptr IS NOT an owner to the resource.
 
+### Function Arguments and Return Values
 
+We need to think about the relationship we want to build between the function and its arguments. When function takes:
+- The object: the function will be an independent owner to a copied resource and the value will be deleted after the function ends
+- The raw pointer: the function will borrow the ownership to the resource and the value will NOT be deleted. 
+- The reference: similar to the raw pointer but cannot accept an empty value.
+- The unique pointer: the function will take the ownership from the original pointer and delete the value after UNLESS we pass in the unique pointer by reference.
+- The shared pointer: the function will be a shared owner to the resource and might delete the value UNLESS we pass in the reference.
+
+One thing we need to be cautious of is that when we receive a return value, figure out if we borrow\share\own exclusively the ownership to the resource before make any changes. Using a smart pointer will rescue us from it. 
 
