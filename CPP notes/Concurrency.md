@@ -12,10 +12,18 @@ In C++ 03, we use calling the third-party function (like pthread) to create a ne
 
 `Join()` does not prevent data race if multiple threads try to change a object with a regular data type. That’s why we need to use std::atomic<T>. Every read/write operation to the atomic variable is synchronized with others. Though the unknown order of the operations could still be a bug in the real life, they will not cause UB.
 
+### Mutex Lock
+
 `Join()` allows us to block the code in a thread until certain thread is finished, but can we do it reversely that allow a thread to wait until unblock called by the other thread. Here is a non-solution, busy-waiting:
 
 Create a shared variable and use it as the condition of a while loop that blocks the code. When another thread changes the variable, the while loop exits, and the code is unblocked. Although the code after the while loop won't be executed, the thread is still working. It is a waste of power and time (if on a single-core machine). Besides, compiler might find out the ready in the loop never changes and cause UB.
 
 One way to solve the problem is to use std::mutex, a mutual exclusion mechanism. It has 2 methods: lock and unlock. When a thread tries to lock a mutex, it will either be blocked if the mutex is locked or continue and lock the mutex of the mutex is not locked. 
 
-We can use mutex to protect the thread safety by putting the code in between mutex.lock() and mutex.unlock(). However, if other piece of code has access to the memory used in between the 2 mutex calls, there will still be UB’s. Hence, the protection must be complete. There is a cleaner way instead of calling lock and unlock around the function, a local std::lock_guard<std::mutex>. The std::mutex will be used as an argument of its constructor and be locked. Similarly, lock_guard’s destructor will be called the function ends and unlock the mutex. 
+We can use mutex to protect the thread safety by putting the code in between mutex.lock() and mutex.unlock(). However, if other piece of code has access to the memory used in between the 2 mutex calls, there will still be UB’s. Hence, the protection must be complete. There is a cleaner way instead of calling lock and unlock around the function, a local std::lock_guard<std::mutex>. The std::mutex will be used as an argument of its constructor and be locked. Similarly, lock_guard’s destructor will be called the function ends and unlock the mutex. This also prevents the case when exception throws and the function exits without calling the mutex.unlock.
+
+A good thing about having the mutex lock as an object is that now functions can pass or return the ownership of a lock. There is a unique_lock<mutex> to manage the unique ownership of mutex locks. The std::lock_guard is a special case that can't be passed and can only be cleaned. And C++ 17 introduces std::scoped_lock<Ts> that is a unique_lock that takes multiple locks.
+  
+ 
+ ### Condition Variable 
+
