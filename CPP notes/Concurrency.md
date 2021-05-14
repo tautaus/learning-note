@@ -31,3 +31,14 @@ Whenever we have a “producer” and a “consumer” where the consumer has to
 In the consumer side, we can have a lock and a condition variable that waits on the lock. When we call `std::condition_variable.wait()`, the thread will drop the lock and go to sleep atomically, so there will be no gap between 2 actions for others to take the lock. When the thread wakes up again, the wait() will reacquire the lock for the thread that gives the thread access to the resource.
  
 In the producer, calling `notify_one`  or `notify_all` methods of condition variable will wake up any/all thread(s) that is blocked on it. There is no big difference between calling the unlock before or after the notify.
+
+### Initialization
+
+What will happen when 2 threads arrive at the initialization of static variable concurrently?
+
+C++ 03 leaves lots of UB’s.  Since C++ 11, the static initialization will automatically block the other threads when they arrive after a thread arrives and unblock them after a thread finish. 
+
+When initializing the member variable, we could use the whole mutex lock, but it could slow the whole thing down. C++ 11 provides a std::once_flag. Exactly as its name, if we call 
+``std::call_once (once_,[]() {<function_body_here>})``
+, the function inside will only be executed once.
+
