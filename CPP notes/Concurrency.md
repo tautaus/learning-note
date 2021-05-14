@@ -22,8 +22,12 @@ One way to solve the problem is to use std::mutex, a mutual exclusion mechanism.
 
 We can use mutex to protect the thread safety by putting the code in between mutex.lock() and mutex.unlock(). However, if other piece of code has access to the memory used in between the 2 mutex calls, there will still be UB’s. Hence, the protection must be complete. There is a cleaner way instead of calling lock and unlock around the function, a local std::lock_guard<std::mutex>. The std::mutex will be used as an argument of its constructor and be locked. Similarly, lock_guard’s destructor will be called the function ends and unlock the mutex. This also prevents the case when exception throws and the function exits without calling the mutex.unlock.
 
-A good thing about having the mutex lock as an object is that now functions can pass or return the ownership of a lock. There is a unique_lock<mutex> to manage the unique ownership of mutex locks. The std::lock_guard is a special case that can't be passed and can only be cleaned. And C++ 17 introduces std::scoped_lock<Ts> that is a unique_lock that takes multiple locks.
-  
- 
- ### Condition Variable 
+A good thing about having the mutex lock as an object is that now functions can pass or return the ownership of a lock. There is a unique_lock<mutex> to manage the unique ownership of mutex locks (including lock and unlock). The std::lock_guard is a special case that can't be passed and can only be cleaned. And C++ 17 introduces std::scoped_lock<Ts> that is a lock_guard that takes multiple locks.
 
+### Condition Variable
+
+Whenever we have a “producer” and a “consumer” where the consumer has to wait for the producer and the production and the consumption happen continuously (task queue for example). We could use the combination of mutex lock and condition variable. 
+
+In the consumer side, we can have a lock and a condition variable that waits on the lock. When we call `std::condition_variable.wait()`, the thread will drop the lock and go to sleep atomically, so there will be no gap between 2 actions for others to take the lock. When the thread wakes up again, the wait() will reacquire the lock for the thread that gives the thread access to the resource.
+ 
+In the producer, calling `notify_one`  or `notify_all` methods of condition variable will wake up any/all thread(s) that is blocked on it. There is no big difference between calling the unlock before or after the notify.
