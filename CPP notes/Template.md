@@ -12,3 +12,4 @@ Specialization is the procedure that provides a concrete implementation for an a
 
 ### Class-Template
 
+Similar to Function-Template, class template is introduced by the keyword *template*. The class method can be implemented inside or outside. The one implemented outside will require the `template` head before the the method. Class Template could also use none-type parameter as inputs such as size_t as the size of array.
