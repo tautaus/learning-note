@@ -17,3 +17,13 @@ Similar to Function-Template, class template is introduced by the keyword *templ
 The instantiation of class templates is like that of function template except class template CANNOT automatically derive their arguments. In the other word, each template argument must be specified explicitly. The good thing is that it is no longer a problem after C++ 17 which provides *template argument deduction*. 
 
 Methods of a class template can be a template of their own. For example, a class of template T could define its = operator by any type of input of template U and `static_cast` it. It also can be definite at both inside and outside of the class. There are 2 functions CANNOT be templates: copy constructor and destructor.
+
+When inheriting from a class template, the derived class does not have methods and attributes automatically. This is because when we have multiple instantiations about the base class, the compiler will not know which one to call. There are 2 alternative solutions for that 
+-	`this->func()`
+-	`Base<T>::func()`
+
+Alias templates allow people to create synonyms for the templates. Using the previous example of array `Array<T, size>`, using `CharArray = Array<char,N>` would make a easier for CharArray. One thing we need to be cautious about is that Alias templates CANNOT be further specialized. 
+
+### Variadic Template
+
+In C++ 11, variadic template allows uncertain number of arguments, which is also called parameter pack . `typename… Ts` ‘declares’ the pack of arguments that can have arbitrary length. In the template, `Ts… ts` is the function argument that contains the pack,`sizeof…(ts)` returns the number of arguments passed and `ts…` unpack the pack of arguments.
