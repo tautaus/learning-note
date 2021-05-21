@@ -30,7 +30,7 @@ In C++ 11, variadic template allows uncertain number of arguments, which is also
 
 Besides the recursion, we could also use the fold expression to unpack the parameter pack.  When we have a pack to be passed into an operation:
 -	Unary operation:
-  -	Right fold:  (pack *op* …)
+  - Right fold:  (pack *op* …)
   -	Left fold: (… *op* pack)
 -	Binary operation:
   -	Right fold: (pack *op* .. *op* init)
