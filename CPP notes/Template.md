@@ -38,8 +38,18 @@ Besides the recursion, we could also use the fold expression to unpack the param
 
 Note that the parenthesis is requited for the fold expression and init stand for initial value when there is only 1 argument for binary operation.
 
+## Debug
+
 ### Substitution Failure Is Not An Error
 
 When the compiler fails at instantiation, it could silently ignore the failure. If in the end, the compiler could not find a match function, it throws a compiler error, which will warn us about the bug. 
 
-Substitution Failure Is Not An Error (SFINAE) is a technique designed for this moment. It simplifies the case more than another specialization or overload does. By having `std::enable_if_t<std::is_sometype_v<T>, bool>` between the template head and function signature of an existed specialization, the compiler will match the function to <some_type>
+Substitution Failure Is Not An Error (SFINAE) is a technique designed for this moment. It simplifies the case more than another specialization or overload does. By having `std::enable_if_t<std::is_sometype_v<T>, bool>` between the template head and function signature of an existed specialization, the compiler will match the function to <some_type>.
+
+### Tag Dispatch
+
+Like SFINAE, tag dispatch is another solution for instantiation failures. We pass a *class tag* into the function (without type declaration). For example:
+
+`function(T t1, T t2, typeA) and function(T t1, T t2, notTypeA)`
+
+where typeA and notTypeA is declared in the internal namespace. The real function `function(T t1, T t2)` calls the internal namespace and checks the type of T to determine which one of typeA and notTypeA will be passed in.
