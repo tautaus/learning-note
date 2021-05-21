@@ -29,9 +29,9 @@ Alias templates allow people to create synonyms for the templates. Using the pre
 In C++ 11, variadic template allows uncertain number of arguments, which is also called parameter pack . `typename… Ts` ‘declares’ the pack of arguments that can have arbitrary length. In the template, `Ts… ts` is the function argument that contains the pack,`sizeof…(ts)` returns the number of arguments passed and `ts…` unpack the pack of arguments.
 
 Besides the recursion, we could also use the fold expression to unpack the parameter pack.  When we have a pack to be passed into an operation:
--	Unary operation:
-  - Right fold:  (pack *op* …)
-  -	Left fold: (… *op* pack)
+*	Unary operation:
+  * Right fold:  (pack *op* …)
+  *	Left fold: (… *op* pack)
 -	Binary operation:
   -	Right fold: (pack *op* .. *op* init)
   - Left fold: (init *op* .. *op* pack)
