@@ -6,3 +6,17 @@ There are 4 types of algebraic data type in std library:
 - std::tuple, since C++ 11
 - std::optional, since C++ 17
 - std::variant, since C++ 17, and C++ 20 fixes its constructor bug.
+
+## Basic Introduction
+
+Pair and Tuple are product type. The product type binds elements together. There might be some padding spaces between elements with different memory size. The order of elements aligned in the product type differs between different libraries. 
+
+The # of possible values of a product type is the product of the # of possible values. The # of possible values of a `variant` object is the sum of the # of possible values. Variant is like a union of types, for example, `variant<A,B>` can be a value of type A or type B. Hence, the "CONCEPTUAL" memory size of a variant will be the max of size of its alternatives. However, if the variant only remember the max size, it will have no idea about what type the alternative is. Therefore, we will need a index part for variant to remember the data type.
+
+The # of possible values of an `optional` object equals to the # of possible values plus 1. `optional<A>` is similar to `variant<A,null>`.
+
+### Motivation
+
+`Pair` was wildly used in classic STL. In the `std::map`, each entry is a pair of key and value. When we try to insert a pair into the map, the pair of iterator and bool that represents the success of the insertion will be returned. 
+
+`Tuple` is a multi-variate case of `pair` when people need more than 2 results. 
