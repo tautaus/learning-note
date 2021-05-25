@@ -20,3 +20,5 @@ The # of possible values of an `optional` object equals to the # of possible val
 `Pair` was wildly used in classic STL. In the `std::map`, each entry is a pair of key and value. When we try to insert a pair into the map, the pair of iterator and bool that represents the success of the insertion will be returned. 
 
 `Tuple` is a multi-variate case of `pair` when people need more than 2 results. 
+
+`Optional` is not used in STL. It tells the caller that the function might result "no result". We can use `.value_or` to shorten the code of checking the flag. 
