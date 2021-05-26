@@ -22,3 +22,12 @@ The # of possible values of an `optional` object equals to the # of possible val
 `Tuple` is a multi-variate case of `pair` when people need more than 2 results. 
 
 `Optional` is not used in STL. It tells the caller that the function might result "no result". We can use `.value_or` to shorten the code of checking the flag. 
+
+### Terminology 
+
+*Engage* and *disengage* are only relevant to `optional`. An `optional` holds a value is said to be engaged, and vice versa. As mentioned above, we use `has_value` to test it.
+
+We can treat variant or optional as a buffer that may or may not hold a value so that we can *emplace* an object into them. When emplace a new object, the old value will be deleted if exists.  
+
+While constructing a variant or optional with an object already emplaced, we can simply use `=` to implicitly move the objects. However, when the object is not movable, we will have to use in_place construction to let the constructor to forward the argument to the constructor. For example, `optional<string> o(std::in_place, “abc”)` or `variant<int, string> v(std::in_place_type<std::string>, “abc”)`.
+
