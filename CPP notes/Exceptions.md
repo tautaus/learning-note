@@ -8,9 +8,13 @@ There are plenty of reason:
 - Rely on dynamic memory: it is a big deal breaker when dynamic allocation is not allowed
 - Increase the binary size: the catcher code will be stored somewhere in the binary file by the compiler
 
-These problems above are theoritical problems that could be solved in the next few versions of cpp. The problems we should be careful about in daily coding are different.
+## Exception Practices
 
-*Stack unwinding* is what usually happens after an exception is thrown that every object on the stack will be destoryed in the reverse order of their construction. However, this is not granted. When the try and catch block is omited, then the exception cannot be kept. When exiting the main function, unhandled exception will result the `std::terminate()` call which brutally terminates the process and leads to memory leak. 
+These problems above are theoretical problems that could be solved in the next few versions of cpp. The problems we should be careful about in daily coding are different.
+
+### When to Use Exceptions (When not)
+
+*Stack unwinding* is what usually happens after an exception is thrown that every object on the stack will be destroyed in the reverse order of their construction. However, this is not granted. When the try and catch block is omitted, then the exception cannot be kept. When exiting the main function, unhandled exception will result the `std::terminate()` call which brutally terminates the process and leads to memory leak. 
 
 That means, we should use exceptions for errors that:
 - are expected to occur rarely
@@ -24,4 +28,10 @@ And we should not use exceptions for errors that:
   - dereference the nullptr
   - index out of range 
   - use after free
+
+### How to Use Exceptions
+
+We define and construct errors by std::exception hierarchy. Throw them by Rvalue and catch them by reference to prevent the unnecessary copy.
+
+### The Exception Safety Guarantees
 
