@@ -38,5 +38,7 @@ We define and construct errors by std::exception hierarchy. Throw them by Rvalue
 There are kinds of safety guarantees:
 - Basic exception safety guarantee: invariants are preserved and no resources are leaked, but variables are not guaranteed to be preserved still.
 - Strong exception safety guarantee guarantees no state change on variables (by commit or rollback). It is usually achieved by create a temporary variable. However it is not always possible (in flows like sockets and streams)
-- No-Throw guarantee uses `noexcept` to make sure no operation will fail. There are functions that should never fail:
-
+- No-Throw guarantee uses `noexcept` to make sure no operation will fail. 
+ 
+There are functions that should never fail. For example, destructors are the functions called in stack unwindering hence are the clean up functions where we want no exception. This kind of function is implicitly marked as noexcept since C++ 11, so that when an exception is thrown, `terminate()` will be called.
+ 
