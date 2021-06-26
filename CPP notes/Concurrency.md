@@ -10,7 +10,7 @@ C++ 11 provides us a formal model of a multi-thread program. Each thread has the
 
 In C++ 03, we use calling the third-party function (like pthread) to create a new thread. In C++ 11, we can easily create a std::thread object by writing the callable as the constructor argument. The thread starts immediately and when it finishes it becomes *joinable*. Calling `join()` on a std::thread object will block (at any thread) before the thread is destroyed. 
 
-`Join()` does not prevent data race if multiple threads try to change a object with a regular data type. That’s why we need to use std::atomic<T>. Every read/write operation to the atomic variable is synchronized with others. Though the unknown order of the operations could still be a bug in the real life, they will not cause UB.
+Data race happens when at least 2 threads access a shared state concurrently and at least one thread tries to modify the shared state. `Join()` does not prevent data race if multiple threads try to change a object with a regular data type. That’s why we need to use std::atomic<T>. Every read/write operation to the atomic variable is synchronized with others. Though the unknown order of the operations could still be a bug in the real life, they will not cause UB.
 
 ### Mutex Lock
 
@@ -41,4 +41,7 @@ C++ 03 leaves lots of UB’s.  Since C++ 11, the static initialization will auto
 When initializing the member variable, we could use the whole mutex lock, but it could slow the whole thing down. C++ 11 provides a std::once_flag. Exactly as its name, if we call 
 ``std::call_once (once_,[]() {<function_body_here>})``
 , the function inside will only be executed once.
+
+## Challenge
+ 
 
