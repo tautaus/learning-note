@@ -11,6 +11,8 @@ C++ 11 provides us a formal model of a multi-thread program. Each thread has the
 In C++ 03, we use calling the third-party function (like pthread) to create a new thread. In C++ 11, we can easily create a std::thread object by writing the callable as the constructor argument. The thread starts immediately and when it finishes it becomes *joinable*. Calling `join()` on a std::thread object will block (at any thread) before the thread is destroyed. 
 
 Data race happens when at least 2 threads access a shared state concurrently and at least one thread tries to modify the shared state. `Join()` does not prevent data race if multiple threads try to change a object with a regular data type. That’s why we need to use std::atomic<T>. Every read/write operation to the atomic variable is synchronized with others. Though the unknown order of the operations could still be a bug in the real life, they will not cause UB.
+ 
+In the compilation, if we include thread sanitizer `-fsanitize=thread` to prevent and even count the data race. This is equivalent to declare every element atomic.
 
 ### Mutex Lock
 
@@ -34,7 +36,7 @@ In the producer, calling `notify_one`  or `notify_all` methods of condition vari
 
 ### Initialization
 
-What will happen when 2 threads arrive at the initialization of static variable concurrently?
+What will happen when 2 threads arrive at the initializat ion of static variable concurrently?
 
 C++ 03 leaves lots of UB’s.  Since C++ 11, the static initialization will automatically block the other threads when they arrive after a thread arrives and unblock them after a thread finish. 
 
@@ -42,6 +44,9 @@ When initializing the member variable, we could use the whole mutex lock, but it
 ``std::call_once (once_,[]() {<function_body_here>})``
 , the function inside will only be executed once.
 
-## Challenge
+## Task
+
+A task is like a data channel, where promise, the data sender, sends the values, exceptions and notifications (to 1 or more receivers) and future, the data receiver calls get and is eventually blocked. Unlike threads, which communicate through shared variable, task is actually the communication chanel for sender and receiver. It can also pass exceptions while all the child and creator threads will be terminated when a exception is caught in a child thread.
  
+When a thread goes out of the scope without being joined, `std::terminate` will be called to terminate the whole program. The solution of having the program restored is to add thread.join() in the destructor by hand. C++20 has jthread which automatically implements this functionality. 
 
