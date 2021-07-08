@@ -17,3 +17,9 @@ The input files in cpp include:
   - Source files, files are provided by other libraries. The build will happen in the build of our own program.
   - Resources
 
+### Development toolchain
+
+During the developments, we use various tools:
+- Source code tools, the tools we use to edit the source code like text editor or IDE
+- Build tools, compilers
+- Dependency tools, the tools we use to manage the dependency.
