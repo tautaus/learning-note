@@ -15,3 +15,23 @@ The views and range algorithm can be combined together to make codes cleaner. Fo
 `vector <int> v { 6, 2, 3, 4, 5, 6}; auto after_leading_evens = rng::views::drop_while(v, is_even); rng::for_each(after_leading_evens, print); cout << end1;`
 
 the loop is very efficient that the view will only be executed when `for_each` is run.
+
+## Range Algorithms
+
+### Projection Parameters
+
+Projections provide first class filtering predicate independent of function to be invoked. For example, if we want to sort a vector of 2-D objects by its first index, we can write an auto of return first index in the third entry without defining the compare operator.
+
+### Range adaptor equivalence
+
+There are 3 equivalent forms:
+- adaptor ( ranges, args ...)
+- adaptor (arg...) (range)
+- range | adaptor (args...)
+
+and their equivalence can be checked either by contents or `ranges::equal`.
+
+## String View & Span
+
+String_view and span are not technically part of ranges but they are designed to satisfy the concept.
+
