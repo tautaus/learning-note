@@ -37,3 +37,10 @@ Unher the hood, each range/adaptor adds a wrappers of view class out of objects.
 
 String_view and span are not technically part of ranges but they are designed to satisfy the concept.
 
+## Performance
+
+The compile time of using ranges is similar to using loops and iterators. 
+
+The development of it is still at a beginning stage. The runtime meassurement is application limited. There are theories developed that believe runtime of it will be same as STL methods as the algorithm behind them are similar.
+
+The `boost.range` have been being used for a decade and it does make the code cleanner.
