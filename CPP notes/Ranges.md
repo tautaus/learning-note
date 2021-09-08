@@ -12,6 +12,6 @@ There are many commonly used tools in the standard library sit in the definition
 
 The views and range algorithm can be combined together to make codes cleaner. For example, if we have 
 
-`auto print = [] (int i) { cout << i << " ";}; \
-auto is_even = [] (int i) { return i % 2 == 0;}; vector <int> v { 6, 2, 3, 4, 5, 6}; auto after_leading_evens = rng::views::drop_while(v, is_even); rng::for_each(after_leading_evens, print); cout << end1;`
+`vector <int> v { 6, 2, 3, 4, 5, 6}; auto after_leading_evens = rng::views::drop_while(v, is_even); rng::for_each(after_leading_evens, print); cout << end1;`
 
+the loop is very efficient that the view will only be executed when `for_each` is run.
