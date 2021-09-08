@@ -29,7 +29,9 @@ There are 3 equivalent forms:
 - adaptor (arg...) (range)
 - range | adaptor (args...)
 
-and their equivalence can be checked either by contents or `ranges::equal`.
+and their equivalence can be checked either by contents or `ranges::equal`. 
+
+Unher the hood, each range/adaptor adds a wrappers of view class out of objects. The stack decides how to filter the iterators and the equivalence of the range types.
 
 ## String View & Span
 
