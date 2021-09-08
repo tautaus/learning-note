@@ -19,3 +19,4 @@ vector <int> v { 6, 2, 3, 4, 5, 6};
 auto after_leading_evens = rng::views::drop_while(v, is_even);
 rng::for_each(after_leading_evens, print);
 cout << end1;`
+d
